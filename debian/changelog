@@ -1,3 +1,9 @@
+mx-tweak (25.05.01mx25) UNRELEASED; urgency=medium
+
+  * picom support
+
+ -- Dolphin Oracle <dolphinoracle@gmail.com>  Sun, 04 May 2025 00:18:14 -0400
+
 mx-tweak (25.04.04mx25) mx; urgency=medium
 
   * filter out attribution file from fluxbox style choosing 
