@@ -1,8 +1,9 @@
-mx-tweak (25.05.01mx25) UNRELEASED; urgency=medium
+mx-tweak (25.05.01mx26) UNRELEASED; urgency=medium
 
   * picom support
+  * KDE theme listing fix
 
- -- Dolphin Oracle <dolphinoracle@gmail.com>  Sun, 04 May 2025 00:18:14 -0400
+ -- Dolphin Oracle <dolphinoracle@gmail.com>  Sun, 04 May 2025 17:49:46 -0400
 
 mx-tweak (25.04.04mx25) mx; urgency=medium
 

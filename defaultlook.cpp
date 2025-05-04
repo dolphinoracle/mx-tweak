@@ -3786,15 +3786,15 @@ void defaultlook::populatethemelists(const QString &value)
     QString current;
 
     if (value == QLatin1String("plasma")){
-        themes = runCmd("LANG=C plasma-apply-desktoptheme --list-themes |grep \"*\" |cut -d\"*\" -f2").output;
+        themes = runCmd("LANG=C.UTF-8 plasma-apply-desktoptheme --list-themes 2>/dev/null |grep \"*\" |cut -d\"*\" -f2").output;
         themes.append("\n");
     }
     if (value == QLatin1String("colorscheme")){
-        themes = runCmd("LANG=C plasma-apply-colorscheme --list-schemes |grep \"*\" |cut -d\"*\" -f2 ").output;
+        themes = runCmd("LANG=C.UTF-8 plasma-apply-colorscheme --list-schemes 2>/dev/null |grep \"*\" |cut -d\"*\" -f2 ").output;
         themes.append("\n");
     }
     if (value == QLatin1String("kdecursors")){
-        themes = runCmd("LANG=C plasma-apply-cursortheme --list-themes | grep \"*\"").output;
+        themes = runCmd("LANG=C.UTF-8 plasma-apply-cursortheme --list-themes 2>/dev/null | grep \"*\"").output;
         themes.append("\n");
     }
     if ( value == QLatin1String("gtk-3.0") || value == QLatin1String("xfwm4")) {
@@ -3981,18 +3981,18 @@ void defaultlook::settheme(const QString &type, const QString &theme, const QStr
 
     } else if ( desktop == "KDE" ){
         if ( type == QLatin1String("plasma") ) {
-            cmd = "LANG=C plasma-apply-desktoptheme " + theme;
+            cmd = "LANG=C.UTF-8 plasma-apply-desktoptheme " + theme;
         }
         if ( type == QLatin1String("colorscheme") ) {
-            cmd = "LANG=C plasma-apply-colorscheme " + theme;
+            cmd = "LANG=C.UTF-8 plasma-apply-colorscheme " + theme;
         }
 
         if ( type == QLatin1String("icons") ) {
-            cmd = "LANG=C /usr/lib/x86_64-linux-gnu/libexec/plasma-changeicons " + theme;
+            cmd = "LANG=C.UTF-8 /usr/lib/x86_64-linux-gnu/libexec/plasma-changeicons " + theme;
         }
 
         if (type == QLatin1String("kdecursor")) {
-            cmd = "LANG=C plasma-apply-cursortheme " + theme;
+            cmd = "LANG=C.UTF-8 plasma-apply-cursortheme " + theme;
         }
         system(cmd.toUtf8());
 
