@@ -137,11 +137,12 @@ public:
     void setuptheme();
     void setupthemechoosers();
     void populatethemelists(const QString &value);
-    static void settheme(const QString &type, const QString &theme, const QString &desktop);
+    void settheme(const QString &type, const QString &theme, const QString &desktop) const;
     void setupEtc();
     void setupFluxbox();
     void setupPlasma();
     void setupSuperKey();
+    void setGTKDarkOrLightMode() const;
     QString readPlasmaPanelConfig(const QString &Key) const;
     QString readTaskmanagerConfig(const QString &Key) const;
     void writePlasmaPanelConfig(const QString &key, const QString &value) const;
@@ -343,6 +344,9 @@ private slots:
     void saveSettings();
 
     void loadSettings();
+
+    void on_checkBoxGTKDarkMode_checkStateChanged(const Qt::CheckState &arg1);
+
 private:
     Ui::defaultlook *ui;
 };

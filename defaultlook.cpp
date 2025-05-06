@@ -1660,11 +1660,15 @@ void defaultlook::setuptheme()
     //reset all checkboxes to unchecked
 
     if (isXfce || isFluxbox){
-    populatethemelists(QStringLiteral("gtk-3.0"));
-    populatethemelists(QStringLiteral("icons"));
-    populatethemelists(QStringLiteral("cursors"));
-    get_cursor_size();
-    cursor_size_flag = true;
+        populatethemelists(QStringLiteral("gtk-3.0"));
+        populatethemelists(QStringLiteral("icons"));
+        populatethemelists(QStringLiteral("cursors"));
+        get_cursor_size();
+        cursor_size_flag = true;
+        QString cmd = " LANG=C.UTF-8 gsettings get org.gnome.desktop.interface color-scheme";
+        if (runCmd(cmd).output == "'prefer-dark'"){
+            ui->checkBoxGTKDarkMode->setChecked(true);
+        }
     }
 
     if (isXfce){
@@ -3935,7 +3939,7 @@ void defaultlook::populatethemelists(const QString &value)
         themelist.removeAll(QStringLiteral("hicolor"));
         ui->listWidgeticons->clear();
         ui->listWidgeticons->addItems(themelist);
-        //current icon set
+        //current icon setsettheme
         if (isXfce){
             current = runCmd(QStringLiteral("xfconf-query -c xsettings -p /Net/IconThemeName")).output;
         } else if (isFluxbox){
@@ -3950,7 +3954,7 @@ void defaultlook::populatethemelists(const QString &value)
     themeflag = true;
 }
 
-void defaultlook::settheme(const QString &type, const QString &theme, const QString &desktop)
+void defaultlook::settheme(const QString &type, const QString &theme, const QString &desktop) const
 {   //set new theme
     QString cmd;
     QString cmd1;
@@ -3961,9 +3965,9 @@ void defaultlook::settheme(const QString &type, const QString &theme, const QStr
             cmd = "xfconf-query -c xsettings -p /Net/ThemeName -s \"" + theme + "\"";
             cmd1 ="gsettings set org.gnome.desktop.interface gtk-theme \"" + theme + "\"";
             if (theme.toLower().contains("dark") || theme.contains("Blackbird")){ //blackbird special case
-                cmd2="gsettings set org.gnome.desktop.interface color-scheme prefer-dark";
+                ui->checkBoxGTKDarkMode->setChecked(true);
             } else {
-                cmd2="gsettings set org.gnome.desktop.interface color-scheme default";
+                ui->checkBoxGTKDarkMode->setChecked(false);
             }
         }
         if ( type == QLatin1String("xfwm4") ) {
@@ -4015,19 +4019,9 @@ void defaultlook::settheme(const QString &type, const QString &theme, const QStr
 
             cmd1 ="gsettings set org.gnome.desktop.interface gtk-theme \"" + theme + "\"";
             if (theme.toLower().contains("dark") || theme.contains("Blackbird")){ //blackbird special case
-                cmd2="gsettings set org.gnome.desktop.interface color-scheme prefer-dark";
-                if (runCmd("grep gtk-application-prefer-dark-theme $HOME/.config/gtk-3.0/settings.ini").exitCode == 0) {
-                    runCmd("sed -i 's/gtk-application-prefer-dark-theme=.*/gtk-application-prefer-dark-theme=true/' $HOME/.config/gtk-3.0/settings.ini");
-                } else {
-                    runCmd("echo gtk-application-prefer-dark-theme=true/' >> $HOME/.config/gtk-3.0/settings.ini");
-                }
+                ui->checkBoxGTKDarkMode->setChecked(true);
             } else {
-                cmd2="gsettings set org.gnome.desktop.interface color-scheme default";
-                if (runCmd("grep gtk-application-prefer-dark-theme $HOME/.config/gtk-3.0/settings.ini").exitCode == 0) {
-                    runCmd("sed -i 's/gtk-application-prefer-dark-theme=.*/gtk-application-prefer-dark-theme=false/' $HOME/.config/gtk-3.0/settings.ini");
-                } else {
-                    runCmd("echo gtk-application-prefer-dark-theme=false/' >> $HOME/.config/gtk-3.0/settings.ini");
-                }
+                ui->checkBoxGTKDarkMode->setChecked(false);
             }
 
             if ( QFile("/usr/bin/preview-mx").exists()){
@@ -4107,9 +4101,40 @@ void defaultlook::settheme(const QString &type, const QString &theme, const QStr
     if (!cmd1.isEmpty()){
         system(cmd1.toUtf8());
     }
-    if (!cmd2.isEmpty()){
-        system(cmd2.toUtf8());
+}
+
+
+void defaultlook::on_checkBoxGTKDarkMode_checkStateChanged(const Qt::CheckState &arg1)
+{
+    if (themeflag){
+        setGTKDarkOrLightMode();
     }
+}
+
+void defaultlook::setGTKDarkOrLightMode() const{
+
+    QString cmd="gsettings set org.gnome.desktop.interface color-scheme default";
+    if (isXfce | isFluxbox ){
+        if (ui->checkBoxGTKDarkMode->isChecked()){
+            cmd="gsettings set org.gnome.desktop.interface color-scheme prefer-dark";
+        }
+        system(cmd.toUtf8());
+    }
+    if (isFluxbox){
+        if (runCmd("grep gtk-application-prefer-dark-theme $HOME/.config/gtk-3.0/settings.ini").exitCode == 0) {
+            runCmd("sed -i 's/gtk-application-prefer-dark-theme=.*/gtk-application-prefer-dark-theme=true/' $HOME/.config/gtk-3.0/settings.ini");
+        } else {
+            runCmd("echo gtk-application-prefer-dark-theme=true/' >> $HOME/.config/gtk-3.0/settings.ini");
+        }
+    } else {
+        if (runCmd("grep gtk-application-prefer-dark-theme $HOME/.config/gtk-3.0/settings.ini").exitCode == 0) {
+            runCmd("sed -i 's/gtk-application-prefer-dark-theme=.*/gtk-application-prefer-dark-theme=false/' $HOME/.config/gtk-3.0/settings.ini");
+        } else {
+            runCmd("echo gtk-application-prefer-dark-theme=false/' >> $HOME/.config/gtk-3.0/settings.ini");
+        }
+    }
+    qDebug() << "dark mode is " << cmd;
+
 }
 
 void defaultlook::on_listWidgetTheme_currentTextChanged(const QString &currentText)
@@ -4556,3 +4581,5 @@ void defaultlook::loadSettings() {
         bool checked = settings.value("checkbox_state", false).toBool();
         ui->checkBoxFluxboxLegacyStyles->setChecked(checked);
     }
+
+
