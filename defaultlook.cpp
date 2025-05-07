@@ -1686,6 +1686,8 @@ void defaultlook::setuptheme()
         populatethemelists(QStringLiteral("kdecursors"));
         populatethemelists(QStringLiteral("icons"));
         ui->pushButtonSettingsToThemeSet->hide();
+        ui->checkBoxGTKDarkMode->hide();
+        ui->checkBoxGTKDarkMode->setEnabled(false);
         ui->spinBoxPointerSize->hide();
         ui->label_35->hide();
     }
@@ -4107,7 +4109,9 @@ void defaultlook::settheme(const QString &type, const QString &theme, const QStr
 void defaultlook::on_checkBoxGTKDarkMode_checkStateChanged(const Qt::CheckState &arg1)
 {
     if (themeflag){
-        setGTKDarkOrLightMode();
+        if (isXfce | isFluxbox ){
+            setGTKDarkOrLightMode();
+        }
     }
 }
 
