@@ -1,3 +1,10 @@
+mx-tweak (25.05.03mx25) mx; urgency=medium
+
+  * modify picom-launch.sh location
+  * fix picom-launch.sh permissions
+
+ -- Dolphin Oracle <dolphinoracle@gmail.com>  Tue, 06 May 2025 22:35:46 -0400
+
 mx-tweak (25.05.02mx25) mx; urgency=medium
 
   * picom support
