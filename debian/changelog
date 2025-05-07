@@ -1,7 +1,9 @@
-mx-tweak (25.05.01mx26) UNRELEASED; urgency=medium
+mx-tweak (25.05.02mx25) mx; urgency=medium
 
   * picom support
-  * KDE theme listing fix
+  * compton support removed
+  * KDE theme listing fix (KDE 6)
+  * gtk3/libadwaita force dark mode support (gtk desktops) 
 
  -- Dolphin Oracle <dolphinoracle@gmail.com>  Sun, 04 May 2025 17:49:46 -0400
 
