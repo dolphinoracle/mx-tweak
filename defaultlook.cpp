@@ -1513,7 +1513,7 @@ void defaultlook::setupEtc()
     }
 
     //setup early KVM module loading
-    test = runCmd("LANG=C grep \"enable_virt_at_load=0\" /etc/modprobe.d/* | grep kvm").output;
+    test = runCmd("LANG=C.UTF-8 grep -H -d recurse \"enable_virt_at_load=0\" /etc/modprobe.d/* 2>/dev/null | grep kvm").output;
     if (!test.isEmpty()){
         if (!test.section(":",1,1).startsWith("#" )){
         ui->checkBoxKVMVirtLoad->setChecked(true);

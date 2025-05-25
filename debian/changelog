@@ -1,3 +1,10 @@
+mx-tweak (25.05.04mx25) mx; urgency=medium
+
+  * modify disable early kvm loading
+  * make work with virtualbox modprobe.d setup
+
+ -- Dolphin Oracle <dolphinoracle@gmail.com>  Sun, 25 May 2025 10:00:49 -0400
+
 mx-tweak (25.05.03mx25) mx; urgency=medium
 
   * modify picom-launch.sh location
